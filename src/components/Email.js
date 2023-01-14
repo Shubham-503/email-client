@@ -3,7 +3,7 @@ import "./Email.css"
 
 const Email = () => {
   return (
-    <div className='email email--read'>
+    <div className='email email--read' onClick={()=>{console.log('clicked')}}>
       <div className="email__left">
         <span className="email__avatar">A</span>
       </div>
