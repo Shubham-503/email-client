@@ -1,0 +1,37 @@
+.email{
+  display: flex;
+  align-items: flex-start;
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: .8rem;
+  padding: .5rem;
+  /* justify-content: center; */
+}
+
+.email__left{
+  margin: 0.5rem 1rem;
+}
+
+.email__avatar{
+  padding: 0.5rem 0.9rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: var(--accent);
+  color: white;
+}
+
+.email__right{
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.email--read{
+  background-color: var(--read-background);
+}
+
+.email--fav{
+  color: var(--accent);
+  font-weight: 700;
+}
