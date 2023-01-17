@@ -8,11 +8,20 @@ const Email = ({email_data, setActiveEmail, activeEmail,markFav}) => {
 
   useEffect(() => {
     let email_date = new Date(email.date)
-    setDate(`${String(email_date.getDate()).padStart(2,"0")}/${String(email_date.getMonth()).padStart(2,"0")}/${String(email_date.getFullYear()).padStart(2,"0")}  `)
+    setDate(`${dateFormat(email_date)} ${covertTo12hrFormat(email_date.getHours(),email_date.getMinutes())}  `)
   })
 
-  
-  
+  const dateFormat = (date) => {
+    return `${String(date.getDate()).padStart(2,"0")}/${String(date.getMonth()).padStart(2,"0")}/${String(date.getFullYear()).padStart(2,"0")}`
+  }
+
+  const covertTo12hrFormat = (hh=20,mm=30) =>{
+    const am_pm = hh>=12?"pm":"am"
+    hh=hh%12
+    if (hh===0) hh=12
+    return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}${am_pm}`
+  }
+
   
   const fetchEmail = (id) => {
     axios.get(`${process.env.REACT_APP_API_URL}?id=${id}`)
@@ -46,7 +55,7 @@ const Email = ({email_data, setActiveEmail, activeEmail,markFav}) => {
         <p className="email__from">From: <strong>{email.from?.name} &#60;{email.from?.email}&#62;</strong></p>
         <p className="email__subject">Subject: <strong>{email.subject}</strong></p>
         <p className="email__description">{email.short_description}</p>
-        <p className="email__dateTime">26/02/22 10:30am {date} {email.favorite && <span className='email--fav'>Favourite</span>}</p>
+        <p className="email__dateTime">{date} {email.favorite && <span className='email--fav'>Favourite</span>}</p>
       </div>
     </div>
   )
