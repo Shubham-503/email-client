@@ -1,6 +1,29 @@
 .app{
+  /* display: flex; */
+}
+
+.email-content{
   display: flex;
 }
 .emails{
   /* width: 30%; */
+  margin-left: 1rem;
+}
+
+.filterBy{
+  margin: 1rem 4rem;
+  display: flex;
+}
+
+.filterBy__categories{
+  margin-left: 2rem;
+}
+
+.filterBy__categories>span{
+  padding: 0.5rem 1.5rem;
+}
+
+.filterBy__categories>span.active{
+  background: var(--filter-button);
+  border-radius: 20px;
 }

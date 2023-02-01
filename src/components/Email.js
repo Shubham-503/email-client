@@ -35,8 +35,11 @@ const Email = ({email_data, setActiveEmail, activeEmail,markFav}) => {
         body:res.data.body
       }))
       setEmail(prev=>({...prev,unread:false}))
-      
-      
+      email_data.unread=false
+      console.log(email_data)
+    })
+    .catch(err => {
+      console.error("Something went wrong during email body fetch", err)
     })
   }
 
