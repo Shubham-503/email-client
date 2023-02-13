@@ -7,66 +7,32 @@ import EmailActive from "./components/EmailActive";
 import { allEmails, fetchEmailsBypage } from "./utils/emailsSlice";
 
 function App() {
-  // const [, setEmails] = useState([])
-  const [activeEmail, setActiveEmail] = useState({});
-  const emails = useSelector((state) => state.emails);
+    const emails = useSelector((state) => state.emails);
+  const [filteredEmails, setFilteredEmails] = useState(emails)
   const dispatch = useDispatch();
-  const markFav = (id) => {
-    // setEmails(emails.map((email)=>{
-    //   if (email.id == id) {
-    //     console.log("in if block");
-    //     email.favorite= true
-    //   console.log(email.favorite);}
-    //   console.log(email,id);
-    //   return email
-    // }))
-    // commented
-    // setEmails(prev => (prev.map((email) => {
-    //   if (email.id === id) {
-    //     console.log("in if block");
-    //     email.favorite = true
-    //     console.log(email.favorite);
-    //   }
-    //   console.log(email, id);
-    //   return email
-    // })))
-    // let temp = emails[id-1]
-    // console.log(id,temp);
-    // console.log(activeEmail);
-    // setEmails(emails=>emails.splice(id-1,1,{...temp,favorite:true}))
-    // console.log(emails)
-  };
+  const currentEmail = useSelector((state) => state.activeEmail);
+ 
 
   // TODO: Convert to modular code
   const condition = (value, email) => {
     if (value === "read") return email.unread == true;
   };
 
-  // const filterEmails = ( cond) => {
-  //   console.log(emails)
-  //   if (cond === "read") {
-  //     setEmails(prev => {
-  //       prev.map(email => {
-  //         if (email.unread === false ) return email
-  //       })
-  //     })
-  //   } else if (cond === "unread") {
-  //     setEmails(prev => {
-  //       prev.map(email => {
-  //         if (email.read === true) {
-  //           console.log("inside if block");
-  //           return email}
-  //       })
-  //     })
-  //   } else if (cond === "favorite") {
-  //     setEmails(prev => {
-  //       prev.map(email => {
-  //         if (email.favorite === true) return email
-  //       })
-  //     })
-  //   }
-  //   console.log(emails)
-  // }
+  const filterEmails = ( cond) => {
+    console.log(emails)
+    
+    if (cond === "read") {
+     const newArray = emails.filter(email=>!email.unread)
+      setFilteredEmails(newArray)
+    } else if (cond === "unread") {
+     const newArray = emails.filter(email=>email.unread)
+      setFilteredEmails(newArray)
+    } else if (cond === "favorite") {
+      const newArray = emails.filter(email=>email.favorite)
+      setFilteredEmails(newArray)
+    }
+    console.log(emails)
+  }
 
   const fetchEmailsbyPage = async (page) => {
     return axios
@@ -86,12 +52,15 @@ function App() {
       });
   };
 
-  useEffect(() => {
-    (async () => {
-      const res = await fetchEmailsbyPage(1);
+  const displayEmails=async(page)=>{
+    const res = await fetchEmailsbyPage(page);
       console.log(res);
       dispatch(allEmails(res));
-    })();
+      setFilteredEmails(res)
+  }
+
+  useEffect(() => {
+    displayEmails(1)
   }, []);
 
   return (
@@ -99,41 +68,40 @@ function App() {
       <div className="filterBy">
         <span>Filter By: </span>
         <div className="filterBy__categories">
-          <span className="unread" onClick={""}>
+          <span className="unread" onClick={()=>filterEmails("unread")}>
             Unread
           </span>
-          <span className="read active">Read</span>
-          <span className="favorite">Favorite</span>
+          <span className="read active" onClick={()=>filterEmails("read")}>Read</span>
+          <span className="favorite" onClick={()=>filterEmails("favorite")}>Favorite</span>
         </div>
       </div>
       <div className="email-content">
         <div
           className="emails"
           style={{
-            width: Object.keys(activeEmail).length !== 0 ? "30%" : "100%",
+            width: Object.keys(currentEmail).length !== 0 ? "30%" : "100%",
           }}
         >
-          {emails &&
-            emails.map((email) => {
+          {filteredEmails &&
+            filteredEmails.map((email) => {
               return (
                 <Email
                   email_data={email}
+                  id={email.id}
                   key={email.id}
-                  setActiveEmail={setActiveEmail}
-                  activeEmail={activeEmail}
-                  markFav={markFav}
+                 
                 />
               );
             })}
          
         </div>
-        {Object.keys(activeEmail).length !== 0 && (
-          <EmailActive
-            activeEmail={activeEmail}
-            emails={emails}
-            markFav={markFav}
-          />
+        {Object.keys(currentEmail).length !== 0 && (
+          <EmailActive/>
         )}
+      </div>
+      <div className="pages">
+        <span className="pg1" onClick={()=>{displayEmails(1)}} >1</span>
+        <span className="pg2" onClick={()=>{displayEmails(2)}} >2</span>
       </div>
     </div>
   );
