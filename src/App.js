@@ -1,57 +1,17 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Email from "./components/Email";
 import EmailActive from "./components/EmailActive";
-import { allEmails, fetchEmailsBypage } from "./utils/emailsSlice";
+import { allEmails } from "./redux/emailsSlice";
+import { filterEmails, fetchEmailsbyPage } from "./utils/helper";
 
 function App() {
   const emails = useSelector((state) => state.emails);
   const [filteredEmails, setFilteredEmails] = useState(emails);
-  const [filter, setFilter] = useState("")
+  const [filter, setFilter] = useState("");
   const dispatch = useDispatch();
   const currentEmail = useSelector((state) => state.activeEmail);
-
-  // TODO: Convert to modular code
-  const condition = (value, email) => {
-    if (value === "read") return email.unread == true;
-  };
-
-  const filterEmails = (cond) => {
-    console.log(emails);
-    setFilter(cond)
-
-    if (cond === "read") {
-      const newArray = emails.filter((email) => !email.unread);
-      setFilteredEmails(newArray);
-    } else if (cond === "unread") {
-      const newArray = emails.filter((email) => email.unread);
-      setFilteredEmails(newArray);
-    } else if (cond === "favorite") {
-      const newArray = emails.filter((email) => email.favorite);
-      setFilteredEmails(newArray);
-    }
-    console.log(emails);
-  };
-
-  const fetchEmailsbyPage = async (page) => {
-    return axios
-      .get(`${process.env.REACT_APP_API_URL}?page=${page}`)
-      .then((res) => {
-        console.log("fetchEmail by page called");
-
-        let allEmails = res.data.list.map((email) => {
-          email.unread = true;
-          email.favorite = false;
-          return email;
-        });
-        return allEmails;
-      })
-      .catch((err) => {
-        console.error("Something went wrong during email fetch", err);
-      });
-  };
 
   const displayEmails = async (page) => {
     const res = await fetchEmailsbyPage(page);
@@ -69,16 +29,31 @@ function App() {
       <div className="filterBy">
         <span>Filter By: </span>
         <div className="filterBy__categories">
-          <span className={`unread ${filter==="unread"?"active":""}`} onClick={() =>
-            {filterEmails("unread")}}>
+          <span
+            className={`unread ${filter === "unread" ? "active" : ""}`}
+            onClick={() => {
+              setFilter("unread");
+              setFilteredEmails(filterEmails("unread", emails));
+            }}
+          >
             Unread
           </span>
-          <span className={`read ${filter==="read"?"active":""}`} onClick={() =>
-            {filterEmails("read")}}>
+          <span
+            className={`read ${filter === "read" ? "active" : ""}`}
+            onClick={() => {
+              setFilter("read");
+              setFilteredEmails(filterEmails("read", emails));
+            }}
+          >
             Read
           </span>
-          <span className={`favorite ${filter==="favorite"?"active":""}`} onClick={() =>
-            {filterEmails("favorite")}}>
+          <span
+            className={`favorite ${filter === "favorite" ? "active" : ""}`}
+            onClick={() => {
+              setFilter("favorite");
+              setFilteredEmails(filterEmails("favorite", emails));
+            }}
+          >
             Favorite
           </span>
         </div>

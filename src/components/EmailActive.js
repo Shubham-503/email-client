@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { markFav } from '../utils/emailsSlice';
+import { markFav } from '../redux/emailsSlice';
 import "./EmailActive.css"
 
 const EmailActive = () => {

@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {activeEmail} from "../utils/activeEmailSlice";
-import { markRead, markFav } from "../utils/emailsSlice";
+import {activeEmail} from "../redux/activeEmailSlice";
+import { markRead, markFav } from "../redux/emailsSlice";
+import { covertTo12hrFormat, dateFormat } from "../utils/helper";
 import "./Email.css";
 
 const Email = ({ email_data:email,id }) => {
@@ -22,22 +23,6 @@ const Email = ({ email_data:email,id }) => {
       )}  `
     );
   });
-
-  const dateFormat = (date) => {
-    return `${String(date.getDate()).padStart(2, "0")}/${String(
-      date.getMonth()
-    ).padStart(2, "0")}/${String(date.getFullYear()).padStart(2, "0")}`;
-  };
-
-  const covertTo12hrFormat = (hh = 20, mm = 30) => {
-    const am_pm = hh >= 12 ? "pm" : "am";
-    hh = hh % 12;
-    if (hh === 0) hh = 12;
-    return `${String(hh).padStart(2, "0")}:${String(mm).padStart(
-      2,
-      "0"
-    )}${am_pm}`;
-  };
 
   const onEmailClick = async (id) => {
     setUnread(false)
