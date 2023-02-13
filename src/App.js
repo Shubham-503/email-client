@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Email from "./components/Email";
-import EmailActive from "./components/EmailActive";
 import { allEmails } from "./redux/emailsSlice";
 import { filterEmails, fetchEmailsbyPage } from "./utils/helper";
+// import EmailActive from "./components/EmailActive";
+const EmailActive = React.lazy(() => import("./components/EmailActive"));
 
 function App() {
   const emails = useSelector((state) => state.emails);
@@ -24,6 +25,11 @@ function App() {
     displayEmails(1);
   }, []);
 
+  const onFilterClick = (cond) => {
+    setFilter(cond);
+    setFilteredEmails(filterEmails(cond, emails));
+  };
+
   return (
     <div className="app">
       <div className="filterBy">
@@ -31,28 +37,19 @@ function App() {
         <div className="filterBy__categories">
           <span
             className={`unread ${filter === "unread" ? "active" : ""}`}
-            onClick={() => {
-              setFilter("unread");
-              setFilteredEmails(filterEmails("unread", emails));
-            }}
+            onClick={() => onFilterClick("unread")}
           >
             Unread
           </span>
           <span
             className={`read ${filter === "read" ? "active" : ""}`}
-            onClick={() => {
-              setFilter("read");
-              setFilteredEmails(filterEmails("read", emails));
-            }}
+            onClick={() => onFilterClick("read")}
           >
             Read
           </span>
           <span
             className={`favorite ${filter === "favorite" ? "active" : ""}`}
-            onClick={() => {
-              setFilter("favorite");
-              setFilteredEmails(filterEmails("favorite", emails));
-            }}
+            onClick={() => onFilterClick("favorite")}
           >
             Favorite
           </span>
@@ -69,8 +66,13 @@ function App() {
             filteredEmails.map((email) => {
               return <Email email_data={email} id={email.id} key={email.id} />;
             })}
+          {filteredEmails.length === 0 && <h1>No Email Found</h1>}
         </div>
-        {Object.keys(currentEmail).length !== 0 && <EmailActive />}
+        {Object.keys(currentEmail).length !== 0 && (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <EmailActive />
+          </Suspense>
+        )}
       </div>
       <div className="pages">
         <span
