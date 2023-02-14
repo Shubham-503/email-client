@@ -48,3 +48,9 @@ export const covertTo12hrFormat = (hh = 20, mm = 30) => {
     "0"
   )}${am_pm}`;
 };
+
+export const truncate = (str, length) => {
+  if (str.length < length) return str;
+  return str.slice(0, 22) + "...";
+};
+
