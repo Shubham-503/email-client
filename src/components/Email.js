@@ -1,19 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {activeEmail} from "../redux/activeEmailSlice";
+import { activeEmail } from "../redux/activeEmailSlice";
 import { markRead, markFav } from "../redux/emailsSlice";
-import { covertTo12hrFormat, dateFormat } from "../utils/helper";
+import { covertTo12hrFormat, dateFormat, truncate } from "../utils/helper";
 import "./Email.css";
 
-const Email = ({ email_data:email,id }) => {
+const Email = ({ email_data: email, id }) => {
   const [date, setDate] = useState("");
-  const [unread, setUnread] = useState(email.unread)
-  const [fav, setFav] = useState(false)
+  const [unread, setUnread] = useState(email.unread);
+  // const [fav, setFav] = useState(email.favorite)
   const currentEmail = useSelector((state) => state.activeEmail);
-  // const email = (useSelector((state) => state.activeEmail))[id-1];
+  // const emailabc = useSelector((state) =>
+  //   state.emails.filter((email) => email.id === id)
+  // );
   const dispatch = useDispatch();
-
+  // console.log(emailabc);
   useEffect(() => {
     let email_date = new Date(email.date);
     setDate(
@@ -25,7 +27,7 @@ const Email = ({ email_data:email,id }) => {
   });
 
   const onEmailClick = async (id) => {
-    setUnread(false)
+    setUnread(false);
     const res = await fetchEmail(email.id);
     console.log("clicked", email, activeEmail.id);
     dispatch(
@@ -34,17 +36,18 @@ const Email = ({ email_data:email,id }) => {
         subject: email.subject,
         name: email.from?.name,
         date: date,
-        body: res.data.body
+        body: res.data.body,
       })
     );
     dispatch(markRead(id));
   };
 
-  const fetchEmail = async(id) => {
-   return axios.get(`${process.env.REACT_APP_API_URL}?id=${id}`)
+  const fetchEmail = async (id) => {
+    return axios
+      .get(`${process.env.REACT_APP_API_URL}?id=${id}`)
       .then((res) => {
         console.log("fetchEmailCalled");
-        return res
+        return res;
         // email_data.unread=false
         // console.log(email_data);
       })
@@ -55,9 +58,9 @@ const Email = ({ email_data:email,id }) => {
 
   return (
     <div
-      className={`email ${email.id === currentEmail.id ? "email--active" : ""} ${
-        unread ? "email--unread" : ""
-      } `}
+      className={`email ${
+        email.id === currentEmail.id ? "email--active" : ""
+      } ${unread ? "email--unread" : ""} `}
       onClick={() => {
         onEmailClick(email.id);
       }}
@@ -77,10 +80,10 @@ const Email = ({ email_data:email,id }) => {
         <p className="email__subject">
           Subject: <strong>{email.subject}</strong>
         </p>
-        <p className="email__description">{email.short_description}</p>
+        <p className="email__description">{Object.keys(currentEmail).length > 0?truncate(email.short_description,30):email.short_description}</p>
         <p className="email__dateTime">
           {date}{" "}
-          {email.favorite && <span className="email--fav" >Favourite</span>}
+          {email.favorite && <span className="email--fav">Favourite</span>}
         </p>
       </div>
     </div>
