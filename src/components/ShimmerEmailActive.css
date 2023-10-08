@@ -1,0 +1,101 @@
+.shimmer {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin: 1rem;
+  background-color: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  /* padding-left: 1rem; */
+  /* padding-right: 1rem; */
+  padding: 2rem;
+}
+
+.shimmer > .emailActive-top {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+
+
+.shimmer>.user__container {
+  display: flex;
+  align-items: flex-start;
+  width:100%
+  /* margin: 0.5rem 1rem; */
+}
+
+.shimmer>.user__details {
+  margin-left: 1rem;
+  width: 100%;
+}
+.shimmer>.user__name {
+  /* background-color: #cacaca; */
+  border-radius: 2px;
+  width: 20%;
+  height: 15px;
+}
+.shimmer>.user__date {
+  margin-top: 1rem;
+  width: 30%;
+  height: 15px;
+  /* background-color: #cacaca; */
+  border-radius: 2px;
+
+}
+.shimmer>.avatar {
+  content: "";
+  padding: 1.5rem 1.9rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: var(--accent);
+  color: white;
+}
+
+.shimmer>.emailActive-bottom {
+  margin-top: 2rem;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.shimmer>.email__body {
+  text-align: justify;
+  margin-left: 4rem;
+  line-height: 1.5rem;
+  width: 100%;
+  height: 100%;
+  /* background-color: #cacaca; */
+  position: absolute;
+  left: -10%;
+  border-radius: 10px;
+}
+
+
+
+.shine {
+  background: #cacaca;
+  background-image: linear-gradient(to right, #cacaca 0%, #edeef1 20%, #f6f7f8 40%, #cacaca 100%);
+  background-repeat: no-repeat;
+  background-size: 1000px 100%; 
+  /* display: inline-block; */
+  /* position: relative;  */
+  
+  animation-duration: 1s;
+  animation-fill-mode: forwards; 
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+  }
+
+  @keyframes placeholderShimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    
+    100% {
+      background-position: -100% 0; 
+    }
+  }

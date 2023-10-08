@@ -15,6 +15,7 @@ const emailsSlice = createSlice({
         if (email.id === action.payload) {
           email.unread = false;
         }
+        return email;
       });
     },
     markFav: (state, action) => {
@@ -22,6 +23,7 @@ const emailsSlice = createSlice({
         if (email.id === action.payload) {
           email.favorite = true;
         }
+        console.log(email);
         return email;
       });
     },

@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Email from "./components/Email";
+import ShimmerEmailActive from "./components/ShimmerEmailActive";
 import { allEmails } from "./redux/emailsSlice";
 import { filterEmails, fetchEmailsbyPage } from "./utils/helper";
 // import EmailActive from "./components/EmailActive";
@@ -9,7 +10,8 @@ const EmailActive = React.lazy(() => import("./components/EmailActive"));
 
 function App() {
   const emails = useSelector((state) => state.emails);
-  const [filteredEmails, setFilteredEmails] = useState(emails);
+  // const [filteredEmails, setFilteredEmails] = useState(emails);
+  let filteredEmails = emails;
   const [filter, setFilter] = useState("");
   const dispatch = useDispatch();
   const currentEmail = useSelector((state) => state.activeEmail);
@@ -18,7 +20,8 @@ function App() {
     const res = await fetchEmailsbyPage(page);
     console.log(res);
     dispatch(allEmails(res));
-    setFilteredEmails(res);
+    // setFilteredEmails(res);
+    filteredEmails = res;
   };
 
   useEffect(() => {
@@ -27,7 +30,8 @@ function App() {
 
   const onFilterClick = (cond) => {
     setFilter(cond);
-    setFilteredEmails(filterEmails(cond, emails));
+    // setFilteredEmails(filterEmails(cond, emails));
+    filteredEmails = filterEmails(cond, emails);
   };
 
   return (
@@ -69,7 +73,7 @@ function App() {
           {filteredEmails.length === 0 && <h1>No Email Found</h1>}
         </div>
         {Object.keys(currentEmail).length !== 0 && (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<ShimmerEmailActive />}>
             <EmailActive />
           </Suspense>
         )}
