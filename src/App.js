@@ -5,12 +5,10 @@ import Email from "./components/Email";
 import ShimmerEmailActive from "./components/ShimmerEmailActive";
 import { allEmails } from "./redux/emailsSlice";
 import { filterEmails, fetchEmailsbyPage } from "./utils/helper";
-// import EmailActive from "./components/EmailActive";
 const EmailActive = React.lazy(() => import("./components/EmailActive"));
 
 function App() {
   const emails = useSelector((state) => state.emails);
-  // const [filteredEmails, setFilteredEmails] = useState(emails);
   let filteredEmails = emails;
   const [filter, setFilter] = useState("");
   const dispatch = useDispatch();
@@ -20,7 +18,6 @@ function App() {
     const res = await fetchEmailsbyPage(page);
     console.log(res);
     dispatch(allEmails(res));
-    // setFilteredEmails(res);
     filteredEmails = res;
   };
 
@@ -30,7 +27,6 @@ function App() {
 
   const onFilterClick = (cond) => {
     setFilter(cond);
-    // setFilteredEmails(filterEmails(cond, emails));
     filteredEmails = filterEmails(cond, emails);
   };
 
