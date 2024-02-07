@@ -9,7 +9,8 @@ const EmailActive = React.lazy(() => import("./components/EmailActive"));
 
 function App() {
   const emails = useSelector((state) => state.emails);
-  let filteredEmails = emails;
+  // let filteredEmails = emails;
+  const [filteredEmails, setFilteredEmails] = useState(() => emails);
   const [filter, setFilter] = useState("");
   const dispatch = useDispatch();
   const currentEmail = useSelector((state) => state.activeEmail);
@@ -18,7 +19,8 @@ function App() {
     const res = await fetchEmailsbyPage(page);
     console.log(res);
     dispatch(allEmails(res));
-    filteredEmails = res;
+    // filteredEmails = res;
+    setFilteredEmails(res);
   };
 
   useEffect(() => {
@@ -27,7 +29,8 @@ function App() {
 
   const onFilterClick = (cond) => {
     setFilter(cond);
-    filteredEmails = filterEmails(cond, emails);
+    // filteredEmails = filterEmails(cond, emails);
+    setFilteredEmails(() => filterEmails(cond, emails));
   };
 
   return (
